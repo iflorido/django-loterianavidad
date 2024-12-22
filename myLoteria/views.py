@@ -29,7 +29,7 @@ else:
 # Funciones de Home
 
 def consultar(n):
-    print(f"numero quellega {n}")
+    #print(f"numero quellega {n}")
     n = str(n)
     chrome_options = Options()
     chrome_options.add_argument("--headless")  # Ejecutar en segundo plano
@@ -61,18 +61,18 @@ def consultar(n):
         if div_pedrea:
         # Buscar el párrafo con la clase "lottery lottery-paragraph"
             premio_span = div_pedrea.find('p', class_='lottery-paragraph')
-            print(f"premsiospan numero {n} cib orenui {premio_span}")
+            #print(f"premsiospan numero {n} cib orenui {premio_span}")
         
             if premio_span:
             # Extraer el texto del párrafo y buscar el premio con regex
                 texto_premio = premio_span.text.strip()
-                print( texto_premio )
+                #print( texto_premio )
                 match = re.search(r"Has ganado (\d+)€!", texto_premio)
-                print(match)
+                #print(match)
                 if match:
                 # Extraer el valor del premio
                     premio = int(match.group(1))
-                    print(f"El número {n} ha sido premiado con {premio} euros.")
+                    #print(f"El número {n} ha sido premiado con {premio} euros.")
                     
                     return float(premio)
                 else:
@@ -101,10 +101,10 @@ def consultarnumero(n):
     valores = [value for key, value in datos.items() if key.startswith("numero")]
     if n in valores:
       premio = 20
-      print(f"esta {n}")
+      #print(f"esta {n}")
     else:
       premio = 0
-      print(f"No esta {n}")
+      #print(f"No esta {n}")
     
     
     #premio = float(datos["premio"])
@@ -210,14 +210,14 @@ def checknumeros():
     #fichero_jugados = open(os.path.join(settings.MEDIA_ROOT, 'mis_numeros.txt'), 'r').read()
     #fichero_jugados = open(settings.MEDIA_ROOT, 'mis_numeros.txt', "r").read()
     mis_premios = {}
-    print(f"misnuemero {mis_premios}")
+    #print(f"misnuemero {mis_premios}")
     total_ganado = 0.0
     total_jugado = 0.0
     for elemento in lineas:
         numero, jugado = elemento.split(":")
         jugado =  jugado.rstrip("\n")
         num = str(numero)
-        print(f"mis nuemero {num}")
+        #print(f"mis nuemero {num}")
         
         ganado_decimo = consultar(num)
         mi_premio = {}
