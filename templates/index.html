@@ -1,0 +1,476 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<script>
+    function enviarFormulario() {
+        var mensaje = document.getElementById('mensaje').value;
+
+        fetch('/home/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'  // Asegúrate de incluir el token CSRF si es necesario
+            },
+            body: 'mensaje=' + encodeURIComponent(mensaje)
+        })
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('resultadopremio').innerHTML = data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+<script>
+  // Recargar la página cada 40 segundos
+  setTimeout(function() {
+      location.reload();
+  }, 160000); // 40,000 milisegundos = 40 segundos
+</script>
+<link
+	  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.1.0/mdb.min.css"
+	  rel="stylesheet"
+	/>
+<!-- Bloque Contenedor-->
+<div class="mb-8"> </div>
+<div class="container">     <!-- bloques de Mis Numeros --> 
+  {% for title, desc in matrix.items %}
+      <div class="col-md-3 d-inline-flex " style="margin-top:15px; display: table-header-group;">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                  {% if desc.premio > 0 %}
+                <img
+                  src="{% static 'images/loteria-premio.png' %}"
+                  alt=""
+                  style="width: 45px; height: 45px"
+                  class="rounded-circle"
+                />
+                {% else %}
+                <img
+                  src="{% static 'images/loteria-no-premio.png' %}"
+                  alt=""
+                  style="width: 45px; height: 45px"
+                  class="rounded-circle"
+                />
+                {% endif %}
+                <div class="ms-1 col-md-10">
+                  <p class="fw-bold mb-1 text-center">Numero: {{title}} | Jugado:  {{ desc.cantidad_jugada }}€</p>
+                  <!--<p class="fw-bold mb-1">numero_jugado: {{ desc.numero_jugado }} </p>
+                  <p class="fw-bold mb-1">cantidad_jugada: {{ desc.cantidad_jugada }} </p>
+                  <p class="fw-bold mb-1">premio: {{ desc.premio }} </p>
+                  <p class="fw-bold mb-1">premioxdecimo: {{ desc.premioxdecimo }} </p>
+                  <p class="fw-bold mb-1">total_ganado: {{ desc.total_ganado }} </p>
+                  <p class="fw-bold mb-1">total_jugado: {{ desc.total_jugado }} </p> -->
+                  {% if desc.premio > 0 %}
+                  
+                  <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">PREMIADO con {{ desc.premioxdecimo }}€</p>
+                  {% else %}
+                  <p class="text-muted mb-0 btn-warning m-1 rounded-3 textoblancobr p-2 text-center" style="font-weight: 700; color: #000000!important;">No premiado</p>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+     {% endfor %}
+     <!-- Fin bloques de Mis Numeros --> </div>
+<div class="container">
+    <!-- Bloque row  1-->
+    <div class="row">
+        <!-- Bloque columna 1-->
+        <div class="col-md-4"> 
+            <!-- Bloque Buscador -->
+            <div class="card col-md-12 mb-2 p-4" >
+                <div class="input-group">
+                    <div class="form-outline" data-mdb-input-init>
+                        <form onsubmit="event.preventDefault(); enviarFormulario();">
+                            {% csrf_token %}
+                      <input id="mensaje" name="mensaje" type="search" class="form-control" style="border: solid 1px; border-color: #a6a9d5;" />
+                      
+                      <label class="form-label" for="form1">Busca tu número</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>
+                      <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                </div>
+            </div>
+            <!-- Fin Bloque Buscador-->
+            <!-- Bloque Resultado Premio-->
+            <div id="resultadopremio"></div>
+            <!-- Fin Bloque resultado premio-->
+            <div class="card col-md-12 mb-2" >
+              <h2 class="col-md-12 text-center p-3">Mis Numeros</h2>
+          </div>
+            <div class="row">
+            
+       
+        </div>
+           <!-- bloques de Mis Numeros --> 
+		{% for title, desc in matrix.items %}
+        <div class="col-md-12" style="margin-top:15px;">
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex align-items-center">
+                    {% if desc.premio > 0 %}
+                  <img
+                    src="{% static 'images/loteria-premio.png' %}"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                    class="rounded-circle"
+                  />
+                  {% else %}
+                  <img
+                    src="{% static 'images/loteria-no-premio.png' %}"
+                    alt=""
+                    style="width: 45px; height: 45px"
+                    class="rounded-circle"
+                  />
+                  {% endif %}
+                  <div class="ms-1 col-md-10">
+                    <p class="fw-bold mb-1 text-center">Numero: {{title}} | Jugado:  {{ desc.cantidad_jugada }}€</p>
+                    <!--<p class="fw-bold mb-1">numero_jugado: {{ desc.numero_jugado }} </p>
+                    <p class="fw-bold mb-1">cantidad_jugada: {{ desc.cantidad_jugada }} </p>
+                    <p class="fw-bold mb-1">premio: {{ desc.premio }} </p>
+                    <p class="fw-bold mb-1">premioxdecimo: {{ desc.premioxdecimo }} </p>
+                    <p class="fw-bold mb-1">total_ganado: {{ desc.total_ganado }} </p>
+                    <p class="fw-bold mb-1">total_jugado: {{ desc.total_jugado }} </p> -->
+                    {% if desc.premio > 0 %}
+                    
+                    <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">PREMIADO con {{ desc.premioxdecimo }}€</p>
+                    {% else %}
+                    <p class="text-muted mb-0 btn-warning m-1 rounded-3 textoblancobr p-2 text-center" style="font-weight: 700; color: #000000!important;">No premiado</p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+       {% endfor %}
+       <!-- Fin bloques de Mis Numeros --> 
+        </div>
+        <!-- Fin Bloque columna 1-->
+        <!-- Bloque columna 2-->
+        <div class="col-md-8 row">
+         
+          <h3 class="card col-md-12 mb-2 p-4 text-center">{{ estado }}</h3>
+            
+            <!-- Bloque premio-->
+            <div class="card col-md-12" >
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/loteria-no-premio.png' %}"
+                      alt=""
+                      style="width: 45px; height: 45px"
+                      class="rounded-circle"
+                    />
+                    <div class="col-md-12 align-center">
+                      {% if primero > 0 %}
+                      <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Primer premio: {{ primero }}</p>
+                      {% else %}
+                      <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Primer premio: {{ primero }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!-- Fin bloque premio-->
+            <!-- Bloque premio-->
+            <div class="card col-md-12" style="margin-top:15px;">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/loteria-no-premio.png' %}"
+                      alt=""
+                      style="width: 45px; height: 45px"
+                      class="rounded-circle"
+                    />
+                    <div class="col-md-12">
+                      {% if segundo > 0 %}
+                      <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Segundo Premio: {{ segundo }}</p>
+                      {% else %}
+                      <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Segundo premio: {{ segundo }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!-- Fin bloque premio-->
+             <!-- Bloque premio-->
+             <div class="card col-md-12" style="margin-top:15px;">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/loteria-no-premio.png' %}"
+                      alt=""
+                      style="width: 45px; height: 45px"
+                      class="rounded-circle"
+                    />
+                    <div class="col-md-12">
+                      
+                         {% if tercero > 0 %}
+                        <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Tercer Premio: {{ tercero }}</p>
+                        {% else %}
+                        <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Tercer premio: {{ tercero }}</p>
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!-- Fin bloque premio-->
+                      <!-- Bloque premio-->
+                      <div class="card col-md-6" style="margin-top:15px;">
+                        <div class="card-body">
+                          <div class="d-flex align-items-center">
+                            <img
+                              src="{% static 'images/loteria-no-premio.png' %}"
+                              alt=""
+                              style="width: 45px; height: 45px"
+                              class="rounded-circle"
+                            />
+                            <div class="col-md-11">
+                              
+                              {% if cuartouno > 0 %}
+                              <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Cuarto Premio: {{ cuartouno }}</p>
+                              {% else %}
+                              <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Cuarto premio: {{ cuartouno }}</p>
+                              {% endif %}
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <!-- Fin bloque premio-->
+                  <!-- Bloque premio-->
+                  <div class="card col-md-6" style="margin-top:15px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="{% static 'images/loteria-no-premio.png' %}"
+                          alt=""
+                          style="width: 45px; height: 45px"
+                          class="rounded-circle"
+                        />
+                        <div class="col-md-11">
+                          
+                          
+                          {% if cuartodos > 0 %}
+                          <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Cuarto Premio: {{ cuartodos }}</p>
+                          {% else %}
+                          <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Cuarto premio: {{ cuartodos }}</p>
+                          {% endif %}
+
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Fin bloque premio-->
+                  <!-- Bloque premio-->
+                  <div class="card col-md-6" style="margin-top:15px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="{% static 'images/loteria-no-premio.png' %}"
+                          alt=""
+                          style="width: 45px; height: 45px"
+                          class="rounded-circle"
+                        />
+                        <div class="col-md-11">
+                          
+                         
+
+                          {% if quintouno > 0 %}
+                          <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Quinto Premio: {{ quintouno }}</p>
+                          {% else %}
+                          <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Quinto premio: {{ quintouno }}</p>
+                          {% endif %}
+
+
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Fin bloque premio-->
+                <!-- Bloque premio-->
+                <div class="card col-md-6" style="margin-top:15px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="{% static 'images/loteria-no-premio.png' %}"
+                          alt=""
+                          style="width: 45px; height: 45px"
+                          class="rounded-circle"
+                        />
+                        <div class="col-md-11">
+                          
+                         
+                          {% if quintodos > 0 %}
+                          <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Quinto Premio: {{ quintodos }}</p>
+                          {% else %}
+                          <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Quinto premio: {{ quintodos }}</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Fin bloque premio-->
+                <!-- Bloque premio-->
+                <div class="card col-md-6" style="margin-top:15px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="{% static 'images/loteria-no-premio.png' %}"
+                          alt=""
+                          style="width: 45px; height: 45px"
+                          class="rounded-circle"
+                        />
+                        <div class="col-md-11">
+                          
+                         
+                          {% if quintotres > 0 %}
+                          <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Quinto Premio: {{ quintotres }}</p>
+                          {% else %}
+                          <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Quinto premio: {{ quintotres }}</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Fin bloque premio-->
+                <!-- Bloque premio-->
+                <div class="card col-md-6" style="margin-top:15px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="{% static 'images/loteria-no-premio.png' %}"
+                          alt=""
+                          style="width: 45px; height: 45px"
+                          class="rounded-circle"
+                        />
+                        <div class="col-md-11">
+                          
+                         
+                          {% if quintocuatro > 0 %}
+                          <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Quinto Premio: {{ quintocuatro }}</p>
+                          {% else %}
+                          <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Quinto premio: {{ quintocuatro }}</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Fin bloque premio-->
+                <!-- Bloque premio-->
+                <div class="card col-md-6" style="margin-top:15px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="{% static 'images/loteria-no-premio.png' %}"
+                          alt=""
+                          style="width: 45px; height: 45px"
+                          class="rounded-circle"
+                        />
+                        <div class="col-md-11">
+                          
+                        
+                          {% if quintocinco > 0 %}
+                          <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Quinto Premio: {{ quintocinco }}</p>
+                          {% else %}
+                          <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Quinto premio: {{ quintocinco }}</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Fin bloque premio-->
+                <!-- Bloque premio-->
+                <div class="card col-md-6" style="margin-top:15px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="{% static 'images/loteria-no-premio.png' %}"
+                          alt=""
+                          style="width: 45px; height: 45px"
+                          class="rounded-circle"
+                        />
+                        <div class="col-md-11">
+                          
+                       
+                          {% if quintoseis > 0 %}
+                          <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Quinto Premio: {{ quintoseis }}</p>
+                          {% else %}
+                          <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Quinto premio: {{ quintoseis }}</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Fin bloque premio-->
+                <!-- Bloque premio-->
+                <div class="card col-md-6" style="margin-top:15px;">
+                    <div class="card-body">
+                      <div class="d-flex align-items-center">
+                        <img
+                          src="{% static 'images/loteria-no-premio.png' %}"
+                          alt=""
+                          style="width: 45px; height: 45px"
+                          class="rounded-circle"
+                        />
+                        <div class="col-md-11">
+                          
+                         
+                          {% if quintosiete > 0 %}
+                          <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Quinto Premio: {{ quintosiete }}</p>
+                          {% else %}
+                          <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Quinto premio: {{ quintosiete }}</p>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <!-- Fin bloque premio-->
+            <!-- Bloque premio-->
+            <div class="card col-md-6" style="margin-top:15px;">
+                <div class="card-body">
+                  <div class="d-flex align-items-center">
+                    <img
+                      src="{% static 'images/loteria-no-premio.png' %}"
+                      alt=""
+                      style="width: 45px; height: 45px"
+                      class="rounded-circle"
+                    />
+                    <div class="col-md-11">
+                      
+                     
+                      {% if quintoocho > 0 %}
+                      <p class="text-muted mb-0 btn-success rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: yellow!important;">Quinto Premio: {{ quintoocho }}</p>
+                      {% else %}
+                      <p class="text-muted mb-0 btn-secondary rounded-3 p-2 textoblancobr text-center" style="font-weight: 700; color: cecece!important;">Quinto premio: {{ quintoocho }}</p>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <!-- Fin bloque premio-->
+          
+        </div>
+        <!-- Fin Bloque columna 2--> 
+    </div> 
+    <!-- Fin Bloque row  1-->
+    </div>
+    <!-- Fin Bloque Contenedor -->
+        
+
+
+
+    
+
+
+
+
+<!-- main body - end
+		================================================== -->
+        {% endblock %}
